@@ -11,7 +11,8 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre, related_name = 'movies')
     rate = models.IntegerField()
     rate_people_count = models.IntegerField()
-    poster_path = models.TextField()
+    poster_path = models.TextField(null=True)
     description = models.TextField()
+    release_date = models.DateTimeField()
     
 
