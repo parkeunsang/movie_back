@@ -8,6 +8,6 @@ from .serializers import MovieSerializer
 
 @api_view(['GET'])
 def movie_list(request):
-    movies = Movie.objects.all()
+    movies = Movie.objects.all()[:20]
     serializer = MovieSerializer(movies, many=True)  # context 느낌
     return Response(serializer.data)
