@@ -23,10 +23,23 @@ INSTALLED_APPS = [
     'boards',
     'movies',
     'recommends',
-    'corsheaders',
     'django_extensions',
+
+    # 3rd party apps
+    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',  # 하단 REST_FRAMEWORK 에서 기본 인증방식으로 TOKEN 을 사용하기 위해 추가
+    'rest_auth',
+
+    # sign-up 관련 필요한 apps
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+
+    # django local apps
     'django.contrib.admin',
+    # signup 을 위해 django-allauth 필요 => django.contrib.sites 도 필요 => SITE_ID 필요
+    'django.contrib.sites', 
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -35,7 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # CORS 관련 추가
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,3 +139,20 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
+
+
+# CORS ALLOW
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+# DRF setting
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 사용하려면 INSTALLED_APPS 에 rest_framework.authtoken 추가 해야함
+        'rest_framework.authentication.TokenAuthentication',  
+    ]
+}
+
+
+# django.contrib.sites 에서 사용
+SITE_ID = 1
