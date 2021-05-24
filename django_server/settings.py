@@ -20,7 +20,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
-    'boards',
+    'board',
     'movies',
     'recommends',
     'django_extensions',
