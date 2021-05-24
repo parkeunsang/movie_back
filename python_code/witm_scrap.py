@@ -9,6 +9,8 @@ def ko_to_en(word):
     return result.text
 
 def get_movie_titles(keywords):
+    keywords = ko_to_en(keywords)
+    print('kw-----------', keywords)
     keywords = keywords.replace(' ','+')
     url = f'https://www.whatismymovie.com/results?text={keywords}'
     source = requests.get(url)
@@ -18,5 +20,5 @@ def get_movie_titles(keywords):
     return titles
 
 
-keywords = ko_to_en('피아노 대만 반전')
-print(get_movie_titles(keywords))
+# keywords = ko_to_en('마동석 형사')
+# print(get_movie_titles(keywords))
