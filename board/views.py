@@ -74,15 +74,18 @@ def create_comment(request, pk):
 
 def comment_list(request, pk):
     comments = Article.objects.get(pk=pk).comment_set.all()
-    data = []
-    for comment in comments:
-        temp = {}
-        temp['user'] = comment.user.username
-        temp['content'] = comment.content
-        temp['comment_id'] = comment.pk
-        temp['user_id'] = comment.user.id
-        data.append(temp)
-    return Response({'data': data})
+    serializer = CommentListSerializer(comments, many=True)
+    print(serializer)
+    # data = []
+    # for comment in comments:
+    #     temp = {}
+    #     temp['user'] = comment.user.username
+    #     temp['content'] = comment.content
+    #     temp['comment_id'] = comment.pk
+    #     temp['user_id'] = comment.user.id
+    #     data.append(temp)
+    # return Response({'data': data})
+    return Response(serializer.data)
 
 
 @permission_classes([IsAuthenticated])
