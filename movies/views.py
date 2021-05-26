@@ -5,7 +5,7 @@ from rest_framework import status
 from .models import Movie
 from .serializers import MovieSerializer
 from python_code import witm_scrap, witm_scrap_img
-
+import datetime
 
 @api_view(['GET'])
 def movie_list(request):
@@ -21,26 +21,22 @@ def movie_data_list(request, query):
         return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# def movie_search(request, picked, query):
-#     if picked == 'title':
-#         movies = Movie.objects.filter(title_ko__contains=query)[:10]
-#         serializer = MovieSerializer(movies, many=True)
-#         return Response(serializer.data)
-#     else:
-#         movie_list = witm_scrap.get_movie_titles(query)
-#         movie_list = [x[:-7] for x in movie_list]
-#         print('ml----------', movie_list)
-#         movies = Movie.objects.filter(title_en__in=movie_list)
-#         serializer = MovieSerializer(movies, many=True)
-#         return Response(serializer.data)
 @api_view(['GET'])
-def movie_search(request, picked, query):
-    if picked == 'title':
-        movies = Movie.objects.filter(title_ko__contains=query)[:10]
-        serializer = MovieSerializer(movies, many=True)
-        return Response(serializer.data)
-    else:
-        img_list = witm_scrap_img.get_movie_imgs(query)
-        data = {'img_list': img_list}
-        return Response(data)
+def movie_search_title(request, query):
+    movies = Movie.objects.filter(title_ko__contains=query)[:10]
+    serializer = MovieSerializer(movies, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def movie_search_keywords(request, query):
+    img_list = witm_scrap_img.get_movie_imgs(query)
+    data = {'img_list': img_list}
+    return Response(data)
+
+@api_view(['GET'])
+def movie_recent(request):
+    movies = Movie.objects.filter(release_date__gte=datetime.datetime.now()).order_by('release_date')[:20]
+    serializer = MovieSerializer(movies, many=True)
+    print(serializer.data)
+    return Response(serializer.data)
