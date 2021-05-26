@@ -1,3 +1,4 @@
+from movies import serializers
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from .models import Keyword, KM
@@ -5,7 +6,24 @@ from rest_framework.response import Response
 from collections import OrderedDict
 from movies.models import Movie
 from django.http import JsonResponse
+from .models import Keyword
+from .serializers import KeywordSerializer
 # Create your views here.
+@api_view(['GET'])
+def all_keywords(request):
+    keywords = Keyword.objects.all()
+    data = []
+    for keyword in keywords:
+        temp = {}
+        temp['name'] = keyword.word
+        temp['id'] = keyword.id
+        data.append(temp)
+    data = {
+        'data': data
+    }
+    return Response(data)
+
+
 @api_view(['GET'])
 def recommend_movies(request, keywords):
     keywords = keywords.split(' ')
