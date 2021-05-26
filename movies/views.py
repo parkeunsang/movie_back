@@ -6,6 +6,7 @@ from .models import Movie
 from .serializers import MovieSerializer
 from python_code import witm_scrap, witm_scrap_img
 import datetime
+import re
 
 @api_view(['GET'])
 def movie_list(request):
@@ -36,7 +37,10 @@ def movie_search_keywords(request, query):
 
 @api_view(['GET'])
 def movie_recent(request):
-    movies = Movie.objects.filter(release_date__gte=datetime.datetime.now()).order_by('release_date')[:20]
+    movies = Movie.objects.filter(release_date__gte=datetime.datetime.now()).filter()
+    pattern_ko = re.compile('[가-힣]+')  # 한글영화만
+    ids = [x.id for x in movies if re.match(pattern_ko, x.title_ko)]
+    movies = Movie.objects.filter(id__in=ids).order_by('release_date')[:20]
     serializer = MovieSerializer(movies, many=True)
-    print(serializer.data)
     return Response(serializer.data)
+
