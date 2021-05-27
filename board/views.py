@@ -1,10 +1,35 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer, CommentListSerializer
 from .models import Article, Comment
+
+
+
+@api_view(['POST'])
+def article_check(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    if article.user != request.user:
+        return Response(status=400)
+    data = {
+        'succuess': True,
+        }
+    return Response(data=data, status=204)
+
+
+@api_view(['POST'])
+def comment_check(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    print(comment.user)
+    print(request.user)
+    if comment.user != request.user:
+        return Response(status=400)
+    data = {
+        'succuess': True,
+        }
+    return Response(data=data, status=204)
 
 
 @api_view(['GET', 'POST'])
@@ -24,11 +49,13 @@ def article_list(request):
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def article_detail(request, article_pk):
+    print('raw', request.user)
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'GET':
         serializer = ArticleSerializer(article)
         return Response(serializer.data, status=201)
     elif request.method == 'DELETE':
+        print('if', request.user)
         if article.user != request.user:
             return Response(status=400)
         article.delete()
@@ -75,7 +102,6 @@ def create_comment(request, pk):
 def comment_list(request, pk):
     comments = Article.objects.get(pk=pk).comment_set.all()
     serializer = CommentListSerializer(comments, many=True)
-    print(serializer)
     # data = []
     # for comment in comments:
     #     temp = {}
