@@ -17,4 +17,4 @@ def get_movie_imgs(keywords):
     table = soup.find('div', {'class':'tab-content'})
     img_links = soup.find_all('div', {'class':'cover-thumbnail'})
     img_links = [x.img['src'] for x in img_links]
-    return img_links[:21]
+    return img_links[:20]
