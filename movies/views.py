@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Movie, MovieUserScore
 from .serializers import MovieSerializer
-from python_code import witm_scrap, witm_scrap_img
+from scripts import witm_scrap, witm_scrap_img
 import datetime
 import re
 
