@@ -19,5 +19,4 @@ def main():
 
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_server.settings.local')
     main()
