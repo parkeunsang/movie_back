@@ -53,7 +53,15 @@ def store_movies(year):
         movie.description = mv['overview']
         movie.release_date = datetime.datetime.strptime(mv['release_date'], '%Y-%m-%d')
         to_db_movies.append(movie)
-    temp = Movie.objects.bulk_create(to_db_movies)
+        
+    div = 100
+    to_db_movies_batch = []
+    for i in range(len(to_db_movies) // div + 1):
+        to_db_movies_batch.append(to_db_movies[i*div:(i+1)*div])
+        
+    for idx, batch in enumerate(to_db_movies_batch):
+        print(round(idx/len(to_db_movies_batch), 2), end='|')
+        temp = Movie.objects.bulk_create(batch)
     # add genre
     mgs = []
     for mv in movies:
